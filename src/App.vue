@@ -183,6 +183,7 @@ const onChangeImportFile = async (f: UploadFile) => {
   }
 
   const file = await f.raw.arrayBuffer()
+  importFilename.value = f.raw.name
   workbook.value = XLSX.read(file)
   const sheetNames = workbook.value.SheetNames
 
@@ -442,6 +443,7 @@ const productCategoryFormSQL = ref<string>()
     <el-icon class="el-icon--upload"><upload-filled /></el-icon>
     <div class="el-upload__text">Drop excel file here or <em>click to load excel file</em></div>
   </el-upload>
+  <h2> FILE - {{ importFilename }}</h2>
   <br />
   <button style="width: 150px; height: 100px; text-align: center;" @click.prevent="submitImportFile">
     Generate

@@ -54,6 +54,6 @@ insert into `t_system_param` (`business_scenario_name`, `param_description`, `pa
     ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Less Than 50K', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_LESS_THAN_50K', '5', 'Integer'),
     ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Range 50K - 100K ', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_50K_TO_100K', '5', 'Integer'),
     ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Range 100K - 200K ', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_100K_TO_200K', '6', 'Integer'),
-    ('Bill Payment', 'system', 'Configuration Commision Fee Lapak Gaming Price Range 200K - 300K ', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_200K_TO_300K', '6', 'Integer'),
+    ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Range 200K - 300K ', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_200K_TO_300K', '6', 'Integer'),
     ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Range 300K - 500K ', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_300K_TO_500K', '7', 'Integer'),
     ('Bill Payment', 'Configuration Commision Fee Lapak Gaming Price Greater Than 500K', 'LAPAK_GAMING_COMMISION_FEE_FORMULA_GAME_VOUCHER_PRICE_GREATER_THAN_500K', '7', 'Integer');

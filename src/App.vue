@@ -379,10 +379,18 @@ const submitImportFile = () => {
   const product = input.products.map(v => {
     return [
       "insert into `t_bill_product` (`admin_fee`, `aggregator`, `biller`, `channel_fee`, `commission_fee`, `created_by`, `created_time`, `is_admin_fee_enabled`, `is_point_enabled`, `is_valid`, `mobile_prefix_pattern`, `product_id`, `product_logo_url`, `product_name`, `secondary_category_code`, `service_fee`, `sort_no`, `transaction_type_code`, `updated_by`, `updated_time`) values",
-      "('" + v.adminFee.toFixed(2) + "', '" + v.aggregator + "', '" + v.biller + "', '0.00', '" + v.commissionFee.toFixed(2) + "', 'system', CURRENT_TIMESTAMP, 'Y', 'N', 'Y', NULL, '" + v.productId + "', '" + (v.productLogoUrl || '') + "', '" + (v.productName || '') + "', '" + v.secondaryCategoryCode + "', '0.00', '" + v.sortNo + "', '" + v.transactionTypeCode + "', 'system', CURRENT_TIMESTAMP);"
+      "('" + v.adminFee.toFixed(2) + "', '" + v.aggregator + "', '" + v.biller + "', '0.00', '" + v.commissionFee.toFixed(2) + "', 'system', CURRENT_TIMESTAMP, 'Y', 'N', '" + v.isValid + "', NULL, '" + v.productId + "', '" + (v.productLogoUrl || '') + "', '" + (v.productName || '') + "', '" + v.secondaryCategoryCode + "', '0.00', '" + v.sortNo + "', '" + v.transactionTypeCode + "', 'system', CURRENT_TIMESTAMP);"
     ].join(" ")
   })
-  productSQL.value = product.join('\n')
+  productSQL.value = product.join('\n');
+  (() => {
+    const blob = new Blob([productSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "insert-new-product.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const productDetail = input.productDetails.map(v => {
     let value = v.value
@@ -395,7 +403,16 @@ const submitImportFile = () => {
       "('" + v.billProductId + "', '" + v.isValid + "', '" + v.type + "', '" + value + "');"
     ].join(" ")
   })
-  productDetailSQL.value = productDetail.join('\n')
+  productDetailSQL.value = productDetail.join('\n');
+
+  (() => {
+    const blob = new Blob([productDetailSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "insert-new-product-detail.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const forms = input.productCategoryForms.map(v => {
     return [
@@ -403,7 +420,16 @@ const submitImportFile = () => {
       "('" + v.aggregator + "', 'system', CURRENT_TIMESTAMP, '" + JSON.stringify(v.description) + "', '" + v.formCondition + "', '" + v.formKey + "', '" + v.formType + "', '" + v.isValid + "', '" + JSON.stringify(v.formLabel) + "', NULL, '" + JSON.stringify(v.options) + "', NULL, '" + v.productCategoryCode + "', '" + v.secondaryCategoryCode + "', '" + v.sortNo + "', 'system', CURRENT_TIMESTAMP);"
     ].join(' ')
   })
-  productCategoryFormSQL.value = forms.join('\n')
+  productCategoryFormSQL.value = forms.join('\n');
+
+  (() => {
+    const blob = new Blob([productCategoryFormSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "insert-new-product-category-form.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const categories = input.productCategories.map(v => {
     return [
@@ -412,13 +438,31 @@ const submitImportFile = () => {
       "('" + v.aggregator + "', '" + v.countryCode + "', 'system', CURRENT_TIMESTAMP, '', '" + v.isValid + "', '" + v.name + "', '" + v.productCategoryCode + "', '" + v.secondaryCategoryCode + "', 'system', CURRENT_TIMESTAMP, '" + v.variant + "');"
     ].join(' ')
   });
-  productCategorySQL.value = categories.join('\n')
+  productCategorySQL.value = categories.join('\n');
+
+  (() => {
+    const blob = new Blob([productCategorySQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "insert-new-product-category.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   // UPDATE
   const productUpdate = input.products.map(v => {
     return "UPDATE `t_bill_product` SET `admin_fee` = '" + v.adminFee.toFixed(2) + "', `biller` = '" + v.biller + "', `is_admin_fee_enabled` = 'Y', `is_point_enabled` = 'N', `is_valid` = '" + v.isValid + "', `product_logo_url` = '" + (v.productLogoUrl || '') + "', `product_name` = '" + (v.productName || '') + "', `sort_no` = '" + v.sortNo + "', `transaction_type_code` = '" + v.transactionTypeCode + "', `updated_time` = CURRENT_TIMESTAMP WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_id` = '" + v.productId + "' AND `aggregator` = '" + v.aggregator + "';"
   })
-  productUpdateSQL.value = productUpdate.join('\n')
+  productUpdateSQL.value = productUpdate.join('\n');
+
+  (() => {
+    const blob = new Blob([productUpdateSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "update-product.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const productDetailUpdate = input.productDetails.map(v => {
     let value = v.value
@@ -426,19 +470,46 @@ const submitImportFile = () => {
     if (!isNaN(val)) {
       value = val.toFixed(2)
     }
-    return "UPDATE `t_bill_product_detail` SET `is_valid` = '" + v.isValid + "', `type` = '" + v.type + "', `value` = '" + value + "' WHERE `bill_product_id` = '" + v.billProductId + "';"
+    return "UPDATE `t_bill_product_detail` SET `is_valid` = '" + v.isValid + "', `value` = '" + value + "' WHERE `bill_product_id` = '" + v.billProductId + "' AND `type` = '" + v.type + "';"
   })
-  productDetailUpdateSQL.value = productDetailUpdate.join('\n')
+  productDetailUpdateSQL.value = productDetailUpdate.join('\n');
+
+  (() => {
+    const blob = new Blob([productDetailUpdateSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "update-product-detail.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const formsUpdate = input.productCategoryForms.map(v => {
     return "UPDATE `t_bill_product_category_form` SET `description` = '" + JSON.stringify(v.description) + "', `form_condition` = '" + v.formCondition + "', `form_type` = '" + v.formType + "', `is_valid` = '" + v.isValid + "', `label` = '" + JSON.stringify(v.formLabel) + "', `options` = '" + JSON.stringify(v.options) + "', `sort_no` = '" + v.sortNo + "', `updated_time` = CURRENT_TIMESTAMP WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_category_code` = '" + v.productCategoryCode + "' AND  `aggregator` = '" + v.aggregator + "' AND `form_key` = '" + v.formKey + "';"
   })
-  productCategoryFormUpdateSQL.value = formsUpdate.join('\n')
+  productCategoryFormUpdateSQL.value = formsUpdate.join('\n');
+
+  (() => {
+    const blob = new Blob([productCategoryFormUpdateSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "update-product-category-form.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 
   const categoriesUpdate = input.productCategories.map(v => {
     return "UPDATE `t_bill_product_category` SET `country_code` = '" + v.countryCode + "', `description` = '', `is_valid` = '" + v.isValid + "', `name` = '" + v.name + "', `updated_time` = CURRENT_TIMESTAMP, `variant` = '" + v.variant + "' WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_category_code` = '" + v.productCategoryCode + "' AND `aggregator` = '" + v.aggregator + "';"
   });
-  productCategoryUpdateSQL.value = categoriesUpdate.join('\n')
+  productCategoryUpdateSQL.value = categoriesUpdate.join('\n');
+
+  (() => {
+    const blob = new Blob([productCategoryUpdateSQL.value], { type: 'plain/text' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = "update-product-category.sql"
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })()
 }
 
 const resetImportFiles = () => {
@@ -482,28 +553,29 @@ const productCategoryUpdateSQL = ref<string>()
   </button>
   <br />
   <br />
-  <h5>Product</h5>
+  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productSQL }}</textarea>
   <br />
-  <h5>Product Update</h5>
+  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productUpdateSQL }}</textarea>
   <br />
-  <h5>Product Detail</h5>
+  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Detail</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productDetailSQL }}</textarea>
   <br />
-  <h5>Product Detail Update</h5>
+  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Detail Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productDetailUpdateSQL }}</textarea>
   <br />
-  <h5>Product Category</h5>
+  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Category</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategorySQL }}</textarea>
   <br />
-  <h5>Product Category Update</h5>
+  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Category Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryUpdateSQL }}</textarea>
   <br />
-  <h5>Product Category Form</h5>
+  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Category Form</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormSQL }}</textarea>
   <br />
-  <h5>Product Category Form Update</h5>
+  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Category Form Update
+  </h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormUpdateSQL }}</textarea>
 </template>
 

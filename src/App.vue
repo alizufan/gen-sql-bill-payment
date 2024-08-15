@@ -253,10 +253,10 @@ const submitImportFile = () => {
         sortNo: v.sort_no,
         isPointEnabled: v.is_point_enabled,
         isAdminFeeEnabled: v.is_admin_fee_enabled,
-        adminFee: v.admin_fee,
-        serviceFee: v.service_fee,
-        commissionFee: v.commission_fee,
-        channelFee: v.channel_fee,
+        adminFee: parseInt(String(v.admin_fee).trim()),
+        serviceFee: parseInt(String(v.service_fee).trim()),
+        commissionFee: parseInt(String(v.commission_fee).trim()),
+        channelFee: parseInt(String(v.channel_fee).trim()),
         productLogoUrl: v.product_logo,
         mobilePrefixPattern: v.mobile_prefix_pattren ?? null,
         isValid: v.is_valid
@@ -413,6 +413,32 @@ const submitImportFile = () => {
     ].join(' ')
   });
   productCategorySQL.value = categories.join('\n')
+
+  // UPDATE
+  const productUpdate = input.products.map(v => {
+    return "UPDATE `t_bill_product` SET `admin_fee` = '" + v.adminFee.toFixed(2) + "', `biller` = '" + v.biller + "', `is_admin_fee_enabled` = 'Y', `is_point_enabled` = 'N', `is_valid` = '" + v.isValid + "', `product_logo_url` = '" + (v.productLogoUrl || '') + "', `product_name` = '" + (v.productName || '') + "', `sort_no` = '" + v.sortNo + "', `transaction_type_code` = '" + v.transactionTypeCode + "', `updated_time` = CURRENT_TIMESTAMP WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_id` = '" + v.productId + "' AND `aggregator` = '" + v.aggregator + "';"
+  })
+  productUpdateSQL.value = productUpdate.join('\n')
+
+  const productDetailUpdate = input.productDetails.map(v => {
+    let value = v.value
+    const val = parseInt(value)
+    if (!isNaN(val)) {
+      value = val.toFixed(2)
+    }
+    return "UPDATE `t_bill_product_detail` SET `is_valid` = '" + v.isValid + "', `type` = '" + v.type + "', `value` = '" + value + "' WHERE `bill_product_id` = '" + v.billProductId + "';"
+  })
+  productDetailUpdateSQL.value = productDetailUpdate.join('\n')
+
+  const formsUpdate = input.productCategoryForms.map(v => {
+    return "UPDATE `t_bill_product_category_form` SET `description` = '" + JSON.stringify(v.description) + "', `form_condition` = '" + v.formCondition + "', `form_type` = '" + v.formType + "', `is_valid` = '" + v.isValid + "', `label` = '" + JSON.stringify(v.formLabel) + "', `options` = '" + JSON.stringify(v.options) + "', `sort_no` = '" + v.sortNo + "', `updated_time` = CURRENT_TIMESTAMP WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_category_code` = '" + v.productCategoryCode + "' AND  `aggregator` = '" + v.aggregator + "' AND `form_key` = '" + v.formKey + "';"
+  })
+  productCategoryFormUpdateSQL.value = formsUpdate.join('\n')
+
+  const categoriesUpdate = input.productCategories.map(v => {
+    return "UPDATE `t_bill_product_category` SET `country_code` = '" + v.countryCode + "', `description` = '', `is_valid` = '" + v.isValid + "', `name` = '" + v.name + "', `updated_time` = CURRENT_TIMESTAMP, `variant` = '" + v.variant + "' WHERE `secondary_category_code` = '" + v.secondaryCategoryCode + "' AND `product_category_code` = '" + v.productCategoryCode + "' AND `aggregator` = '" + v.aggregator + "';"
+  });
+  productCategoryUpdateSQL.value = categoriesUpdate.join('\n')
 }
 
 const resetImportFiles = () => {
@@ -423,10 +449,16 @@ const resetImportFiles = () => {
     delete importSheetMasterData[sheet]
   }
 }
+
 const productSQL = ref<string>()
 const productDetailSQL = ref<string>()
 const productCategorySQL = ref<string>()
 const productCategoryFormSQL = ref<string>()
+
+const productUpdateSQL = ref<string>()
+const productDetailUpdateSQL = ref<string>()
+const productCategoryFormUpdateSQL = ref<string>()
+const productCategoryUpdateSQL = ref<string>()
 
 </script>
 
@@ -453,14 +485,26 @@ const productCategoryFormSQL = ref<string>()
   <h5>Product</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productSQL }}</textarea>
   <br />
+  <h5>Product Update</h5>
+  <textarea style="width: 1280px; height: 500px;">{{ productUpdateSQL }}</textarea>
+  <br />
   <h5>Product Detail</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productDetailSQL }}</textarea>
+  <br />
+  <h5>Product Detail Update</h5>
+  <textarea style="width: 1280px; height: 500px;">{{ productDetailUpdateSQL }}</textarea>
   <br />
   <h5>Product Category</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategorySQL }}</textarea>
   <br />
+  <h5>Product Category Update</h5>
+  <textarea style="width: 1280px; height: 500px;">{{ productCategoryUpdateSQL }}</textarea>
+  <br />
   <h5>Product Category Form</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormSQL }}</textarea>
+  <br />
+  <h5>Product Category Form Update</h5>
+  <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormUpdateSQL }}</textarea>
 </template>
 
 <style scoped>

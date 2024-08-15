@@ -548,33 +548,33 @@ const productCategoryUpdateSQL = ref<string>()
   </el-upload>
   <h2> FILE - {{ importFilename }}</h2>
   <br />
-  <button style="width: 150px; height: 100px; text-align: center;" @click.prevent="submitImportFile">
+  <button style="width: 150px; height: 100px; text-align: center; background-color: #42A5F5; color: white;" @click.prevent="submitImportFile">
     Generate
   </button>
   <br />
   <br />
-  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product</h5>
+  <h5 class="green-center">Product</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productSQL }}</textarea>
   <br />
-  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Update</h5>
+  <h5 class="red-center">Product Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productUpdateSQL }}</textarea>
   <br />
-  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Detail</h5>
+  <h5 class="green-center">Product Detail</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productDetailSQL }}</textarea>
   <br />
-  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Detail Update</h5>
+  <h5 class="red-center">Product Detail Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productDetailUpdateSQL }}</textarea>
   <br />
-  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Category</h5>
+  <h5 class="green-center">Product Category</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategorySQL }}</textarea>
   <br />
-  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Category Update</h5>
+  <h5 class="red-center">Product Category Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryUpdateSQL }}</textarea>
   <br />
-  <h5 style="padding: 10px; background-color: #66BB6A; height: 50px; text-align: center;">Product Category Form</h5>
+  <h5 class="green-center">Product Category Form</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormSQL }}</textarea>
   <br />
-  <h5 style="background-color: #F06292; height: 50px; padding: 10px; text-align: center;">Product Category Form Update
+  <h5 class="red-center">roduct Category Form Update
   </h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormUpdateSQL }}</textarea>
 </template>
@@ -593,5 +593,23 @@ const productCategoryUpdateSQL = ref<string>()
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+.green-center {
+  padding: 10px;
+  background-color: #66BB6A;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.red-center {
+  padding: 10px;
+  background-color: #F06292;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

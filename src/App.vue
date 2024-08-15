@@ -574,8 +574,7 @@ const productCategoryUpdateSQL = ref<string>()
   <h5 class="green-center">Product Category Form</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormSQL }}</textarea>
   <br />
-  <h5 class="red-center">roduct Category Form Update
-  </h5>
+  <h5 class="red-center">Product Category Form Update</h5>
   <textarea style="width: 1280px; height: 500px;">{{ productCategoryFormUpdateSQL }}</textarea>
 </template>
 
